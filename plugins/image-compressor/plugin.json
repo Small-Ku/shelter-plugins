@@ -1,0 +1,6 @@
+{
+	"name": "Image Compressor",
+	"author": "Small-Ku",
+	"description": "Automatically compresses large images that exceed Discord's upload limit.",
+	"version": "1.0.0"
+}
