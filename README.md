@@ -1,37 +1,85 @@
-# [Your name here]'s shelter plugins
-If you're reading this you should either change this README,
-or you should run `npx degit uwu/shelter-template shelter-plugins`!
+# 🛠️ Small-Ku's Shelter Plugins
 
-## Getting started
-You should be using [pnpm](https://pnpm.io/) with this template ideally.
+A collection of premium, high-performance plugins for the [shelter](https://github.com/uwu/shelter) Discord client mod.
 
-To install the dependencies and debug `hello-world` run:
-```sh
-pnpm i 
-pnpm lune dev plugins/hello-world
-```
+---
 
-Ensure that Lune Dev Mode is enabled in Discord so that lune can connect to it.
+## 🌟 Featured Plugins
 
-Now you can start debugging. The plugin will automatically reload after every change.
+### [🖼️ Image Compressor](./plugins/image-compressor)
+**Stop worrying about "Your file is too powerful".**
 
-## Installing
-To then install your finished plugin in shelter you can either rely on GitHub pages and it's workflow or you can build and host them here temporarily.
+This plugin automatically intercepts large image uploads that exceed Discord's file size limit and compresses them on-the-fly using high-quality WASM-based encoders.
 
-### Building locally
-To build and host your plugins locally run:
-```sh
-pnpm lune ci
-npx http-server dist/ --cors
-```
-Then you can install your plugin in shelter with this URL `http://localhost:8080/hello-world`.
+#### ✨ Key Features
+- **🚀 Automated Interception**: Transparently catches large uploads and offers instant optimization.
+- **📈 Smart Quality Prediction**: Uses a sophisticated curve-fitting algorithm to find the perfect quality settings for your target size.
+- **🎨 Premium Comparison View**: Side-by-side interactive comparison with original images, featuring synchronous zoom and pan and live file size updates.
+- **🛠️ Manual Fine-Tuning**: Full control over output formats (MozJPEG, libwebp, OxiPNG), custom dimensions, and quality levels with real-time previews.
+- **🧵 Background Processing**: Powered by Web Workers to ensure Discord stays smooth even during heavy compression.
+- **📦 Batch Queue**: Efficiently handle multiple image uploads simultaneously.
 
-### Publishing via GitHub
-If you have published this repo on GitHub the plugins will be built after every commit.
+---
 
-For the GitHub action to run flawlessly, make sure you have the following setting enabled:
-`Repo settings > Actions > General > Workflow permissions > Read and write permissions`
+## 📥 Installation
 
-And for it to be hosted correctly you need to configure the `gh-pages` branch after its been created by the GitHub action. You can do this in `Repo settings > Pages > Branch`.
+1. Open your **Discord Settings**.
+2. Navigate to the **shelter** section.
+3. Go to **Plugins** and click **Install Plugin**.
+4. Enter the URL for the plugin you want to install:
 
-If this worked, you will be able to install the plugin via `https://<username>.github.io/<repo>/hello-world`.
+| Plugin | URL |
+| :--- | :--- |
+| **Image Compressor** | `https://small-ku.github.io/shelter-plugins/image-compressor` |
+
+> [!TIP]
+> Ensure **Lune Dev Mode** is enabled in shelter settings if you are developing or testing locally.
+
+---
+
+## 🛠️ Development
+
+This repository is managed using [Bun](https://bun.sh/) and [Lune](https://github.com/uwu/shelter/tree/main/packages/lune).
+
+### Prerequisites
+- [Bun](https://bun.sh/) installed on your system.
+
+### Getting Started
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/Small-Ku/shelter-plugins.git
+   cd shelter-plugins
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   bun install
+   ```
+
+3. **Develop a plugin:**
+   ```bash
+   bun lune dev plugins/image-compressor
+   ```
+
+4. **Build and Preview:**
+   ```bash
+   bun lune ci
+   # Host locally for testing
+   bun x http-server dist/ --cors
+   ```
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Whether it's reporting a bug, suggesting a feature, or submitting a pull request, feel free to get involved.
+
+1. Fork the repo.
+2. Create your feature branch (`git checkout -b feature/amazing-feature`).
+3. Commit your changes (`git commit -m 'Add some amazing feature'`).
+4. Push to the branch (`git push origin feature/amazing-feature`).
+5. Open a Pull Request.
+
+---
+
+<p align="center">Made with ❤️ by <a href="https://github.com/Small-Ku">Small-Ku</a></p>
