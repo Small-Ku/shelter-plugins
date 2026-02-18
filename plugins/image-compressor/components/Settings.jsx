@@ -1,4 +1,4 @@
-import { Workflow, Strategy, Engine, DEFAULTS } from "../lib/constants";
+import { Workflow, Strategy, DEFAULTS } from "../lib/constants";
 import { t } from "../lib/i18n";
 
 const {
@@ -72,17 +72,6 @@ export const Settings = () => {
 
             <Header tag={HeaderTags.H3} style={{ "margin-bottom": "16px" }}>{t("compression_pipeline")}</Header>
             <SelectionItem
-                label={t("engine")}
-                note={t("engine_note")}
-                value={store.engine || DEFAULTS.engine}
-                onChange={(v) => { store.engine = v; }}
-                options={[
-                    { label: t("jsquash_wasm"), value: Engine.JSQUASH },
-                    { label: t("browser_canvas"), value: Engine.CANVAS }
-                ]}
-            />
-
-            <SelectionItem
                 label={t("output_format")}
                 note={t("output_format_note")}
                 value={store.format || DEFAULTS.format}
@@ -90,7 +79,9 @@ export const Settings = () => {
                 options={[
                     { label: t("jpeg"), value: "image/jpeg" },
                     { label: t("webp"), value: "image/webp" },
-                    { label: t("png"), value: "image/png" }
+                    { label: t("png"), value: "image/png" },
+                    { label: t("gif"), value: "image/gif" },
+                    { label: t("avif"), value: "image/avif" },
                 ]}
             />
 
@@ -152,4 +143,3 @@ export const Settings = () => {
         </div>
     );
 };
-

@@ -9,7 +9,7 @@ const {
         Text,
         TextTags
     },
-    solid: { For }
+    solid: { For, Show }
 } = shelter;
 
 export const ManualCompressionControls = (props) => {
@@ -17,8 +17,6 @@ export const ManualCompressionControls = (props) => {
         localMaxDim, setLocalMaxDim,
         localQuality, setLocalQuality,
         localFormat, setLocalFormat,
-        localEngine, setLocalEngine,
-        localUseOxipng, setLocalUseOxipng,
         onRecompress,
         index
     } = props;
@@ -61,12 +59,9 @@ export const ManualCompressionControls = (props) => {
     const formats = [
         { label: t("jpeg"), value: "image/jpeg" },
         { label: t("webp"), value: "image/webp" },
-        { label: t("png"), value: "image/png" }
-    ];
-
-    const engines = [
-        { label: t("jsquash_wasm"), value: "jsquash" },
-        { label: t("browser_canvas"), value: "canvas" }
+        { label: t("png"), value: "image/png" },
+        { label: t("gif"), value: "image/gif" },
+        { label: t("avif"), value: "image/avif" },
     ];
 
     return (
@@ -79,7 +74,7 @@ export const ManualCompressionControls = (props) => {
                 <div style={labelStyle}>
                     <Text tag={TextTags.textXS}>{t("output_format")}</Text>
                 </div>
-                <div style={{ display: "flex", gap: "4px" }}>
+                <div style={{ display: "flex", gap: "4px", "flex-wrap": "wrap" }}>
                     <For each={formats}>
                         {(fmt) => (
                             <button
@@ -103,34 +98,6 @@ export const ManualCompressionControls = (props) => {
                 </div>
             </div>
 
-            <div style={{ "margin-bottom": "16px" }}>
-                <div style={labelStyle}>
-                    <Text tag={TextTags.textXS}>{t("engine")}</Text>
-                </div>
-                <div style={{ display: "flex", gap: "4px" }}>
-                    <For each={engines}>
-                        {(eng) => (
-                            <button
-                                type="button"
-                                onClick={() => setLocalEngine(eng.value)}
-                                style={{
-                                    flex: 1,
-                                    padding: "4px",
-                                    "font-size": "10px",
-                                    "border-radius": "4px",
-                                    border: "1px solid rgba(255, 255, 255, 0.1)",
-                                    background: localEngine() === eng.value ? "var(--brand-experiment)" : "rgba(255, 255, 255, 0.05)",
-                                    color: localEngine() === eng.value ? "white" : "var(--text-normal)",
-                                    cursor: "pointer"
-                                }}
-                            >
-                                {eng.label}
-                            </button>
-                        )}
-                    </For>
-                </div>
-            </div>
-
             <div style={{ "display": "flex", "flex-direction": "column", gap: "16px", "margin-bottom": "16px" }}>
                 <div style={rowStyle}>
                     <div>
@@ -148,18 +115,6 @@ export const ManualCompressionControls = (props) => {
                         <Slider min={512} max={8192} step={128} value={localMaxDim()} onInput={setLocalMaxDim} />
                     </div>
                 </div>
-
-                <Show when={localFormat() === "image/png"}>
-                    <div style={{ display: "flex", "justify-content": "space-between", "align-items": "center", background: "rgba(255,255,255,0.03)", padding: "8px", "border-radius": "4px" }}>
-                        <Text tag={TextTags.textXS}>{t("oxipng_opt")}</Text>
-                        <input
-                            type="checkbox"
-                            checked={localUseOxipng()}
-                            onChange={(e) => setLocalUseOxipng(e.target.checked)}
-                            style={{ cursor: "pointer" }}
-                        />
-                    </div>
-                </Show>
             </div>
 
             <div style={{ display: "flex", "flex-direction": "column", gap: "8px" }}>
@@ -171,8 +126,6 @@ export const ManualCompressionControls = (props) => {
                             quality: localQuality(),
                             maxDim: localMaxDim(),
                             format: localFormat(),
-                            engine: localEngine(),
-                            useOxipng: localUseOxipng()
                         });
                     }}
                     style={{ width: "100%" }}

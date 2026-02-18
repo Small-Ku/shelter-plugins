@@ -1,6 +1,6 @@
 import { CompressionModal } from "./components/CompressionModal";
 import { Settings } from "./components/Settings";
-import { initWorker } from "./lib/codec";
+import { initCodecs } from "./lib/codec";
 import { DEFAULTS, Strategy, Workflow, processedFiles } from "./lib/constants";
 import { t } from "./lib/i18n";
 import { compressImage, getLimit } from "./lib/util";
@@ -52,10 +52,6 @@ const unintercept = intercept((action) => {
             const [localTarget, setLocalTarget] = createSignal(store.targetSize || DEFAULTS.targetSize);
             const [localAccuracy, setLocalAccuracy] = createSignal(store.accuracy || DEFAULTS.accuracy);
             const [localFormat, setLocalFormat] = createSignal(store.format || DEFAULTS.format);
-            const [localEngine, setLocalEngine] = createSignal(store.engine || DEFAULTS.engine);
-            const [localUseOxipng, setLocalUseOxipng] = createSignal(true);
-
-            const currentEngine = store.engine || DEFAULTS.engine;
 
             const initialQueue = files.map(f => {
                 const actualFile = f.file || f;
@@ -98,8 +94,6 @@ const unintercept = intercept((action) => {
                     localTarget={localTarget} setLocalTarget={setLocalTarget}
                     localAccuracy={localAccuracy} setLocalAccuracy={setLocalAccuracy}
                     localFormat={localFormat} setLocalFormat={setLocalFormat}
-                    localEngine={localEngine} setLocalEngine={setLocalEngine}
-                    localUseOxipng={localUseOxipng} setLocalUseOxipng={setLocalUseOxipng}
                     onCancel={() => { isCancelled = true; props.close(); }}
                     onConfirm={() => {
                         const results = queue().map(item => {
@@ -118,8 +112,6 @@ const unintercept = intercept((action) => {
                             const newQ = [...q];
                             const item = newQ[idx];
                             if (item.autoFile) {
-                                // If we have an auto result, restore it
-                                // First revoke the manual one if it exists
                                 if (item.compressedUrl && item.compressedUrl !== item.autoUrl && item.compressedUrl !== item.previewUrl) {
                                     URL.revokeObjectURL(item.compressedUrl);
                                 }
@@ -127,7 +119,6 @@ const unintercept = intercept((action) => {
                                     ...item,
                                     compressedFile: item.autoFile,
                                     compressedUrl: item.autoUrl,
-                                    // Keep autoFile/autoUrl in case they want to manual compress again
                                     status: 'done',
                                     passMetadata: null
                                 };
@@ -162,8 +153,6 @@ const unintercept = intercept((action) => {
                                 maxDimension: settings.maxDim,
                                 strategy: Strategy.ONCE,
                                 format: settings.format,
-                                engine: settings.engine,
-                                useOxipng: settings.useOxipng,
                                 onPass: (pass, quality, intermediateFile, points) => {
                                     setQueue(q => {
                                         const newQ = [...q];
@@ -264,7 +253,6 @@ const unintercept = intercept((action) => {
                             accuracy: localAccuracy(),
                             strategy: strategy,
                             format: localFormat(),
-                            engine: currentEngine,
                             onPass: (pass, quality, intermediateFile, points) => {
                                 setQueue(q => {
                                     const newQ = [...q];
@@ -304,7 +292,6 @@ const unintercept = intercept((action) => {
 
                         processedFiles.add(compressed);
 
-                        // If we didn't update onPass (single pass), or for final result
                         const compUrl = URL.createObjectURL(compressed);
 
                         setFinished(v => v + 1);
@@ -318,7 +305,7 @@ const unintercept = intercept((action) => {
                             }
                             newQ[idx].compressedFile = compressed;
                             newQ[idx].compressedUrl = compUrl;
-                            newQ[idx].passMetadata = null; // Clear live metadata as we are "done"
+                            newQ[idx].passMetadata = null;
                             log(`Final: Set compressedUrl for ${item.name}, size ${compressed.size}`);
                             return newQ;
                         });
@@ -378,7 +365,7 @@ async function patchStores() {
 
 export function onLoad() {
     log("Image Compressor loaded");
-    initWorker();
+    initCodecs();
     patchStores();
 }
 

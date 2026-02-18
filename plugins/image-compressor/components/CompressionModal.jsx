@@ -29,8 +29,6 @@ export const CompressionModal = (props) => {
         localMaxDim, setLocalMaxDim,
         localQuality, setLocalQuality,
         localFormat, setLocalFormat,
-        localEngine, setLocalEngine,
-        localUseOxipng, setLocalUseOxipng,
         onCancel,
         onConfirm,
         onRestoreAuto,
@@ -69,7 +67,7 @@ export const CompressionModal = (props) => {
     };
 
     const glassContainerStyle = {
-        background: "rgba(32, 34, 37, 0.9)", // Darker base for better readability
+        background: "rgba(32, 34, 37, 0.9)",
         "backdrop-filter": "blur(24px)",
         "border-radius": "16px",
         border: "1px solid rgba(255, 255, 255, 0.08)",
@@ -77,7 +75,7 @@ export const CompressionModal = (props) => {
         display: "flex",
         "flex-direction": "column",
         "max-height": "85vh",
-        "min-height": "600px", // Ensure minimum height for good layout
+        "min-height": "600px",
         "box-shadow": "0 8px 32px rgba(0, 0, 0, 0.4)"
     };
 
@@ -119,7 +117,7 @@ export const CompressionModal = (props) => {
                         {/* Main Content Area (Left/Top) */}
                         <div style={{ flex: 2, display: "flex", "flex-direction": "column", gap: "16px", overflow: "hidden" }}>
                             {/* Inspection View / Comparison */}
-                            <Show when={inspectedItem()} fallback={
+                            <Show when={!!inspectedItem()} fallback={
                                 !started() ? (
                                     <div style={{ ...previewContainerStyle, "align-items": "center", "justify-content": "center", opacity: 0.5 }}>
                                         <Text>{t("preview_select")}</Text>
@@ -155,7 +153,7 @@ export const CompressionModal = (props) => {
                                 </div>
                             </Show>
 
-                            {/* Queue List - moved to bottom of main area */}
+                            {/* Queue List */}
                             <div style={{ height: "140px", flexShrink: 0 }}>
                                 <CompressionQueue
                                     queue={queue}
@@ -172,8 +170,6 @@ export const CompressionModal = (props) => {
                                     localMaxDim={localMaxDim} setLocalMaxDim={setLocalMaxDim}
                                     localQuality={localQuality} setLocalQuality={setLocalQuality}
                                     localFormat={localFormat} setLocalFormat={setLocalFormat}
-                                    localEngine={localEngine} setLocalEngine={setLocalEngine}
-                                    localUseOxipng={localUseOxipng} setLocalUseOxipng={setLocalUseOxipng}
                                     onRecompress={onRecompress}
                                     onRestoreAuto={(idx) => {
                                         onRestoreAuto(idx);
@@ -185,7 +181,6 @@ export const CompressionModal = (props) => {
                                 />
                             </Show>
 
-                            {/* Empty state filler or info */}
                             <Show when={started() && !inspectedItem()?.status === 'done'}>
                                 <div style={{
                                     padding: "20px",

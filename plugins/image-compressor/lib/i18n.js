@@ -14,11 +14,6 @@ const translations = {
 		always_compress: "Once",
 		never: "Manual",
 		compression_pipeline: "Compression Settings",
-		engine: "Codec Engine",
-		engine_note:
-			"Select the codec engine. WASM is slower but provides better compression quality.",
-		jsquash_wasm: "JSquash WASM",
-		browser_canvas: "Browser Canvas",
 		output_format: "Output Format",
 		output_format_note: "The file encoding for compressed images.",
 		default_params: "Default Parameters",
@@ -43,7 +38,6 @@ const translations = {
 		discard_all: "Discard All",
 		use_optimized: "Use Compressed Version",
 		manual_comp: "Manual Compression",
-		oxipng_opt: "OxiPNG",
 		start_manual: "Compress",
 		discard_manual: "Discard Manual Tweaks",
 		pass_info: "Pass {{pass}} ({{quality}}%)",
@@ -58,6 +52,8 @@ const translations = {
 		jpeg: "JPEG",
 		webp: "WebP",
 		png: "PNG",
+		gif: "GIF",
+		avif: "AVIF",
 	},
 	"zh-TW": {
 		plugin_name: "圖片壓縮器",
@@ -72,10 +68,6 @@ const translations = {
 		always_compress: "單次",
 		never: "手動",
 		compression_pipeline: "壓縮設定",
-		engine: "編解碼引擎",
-		engine_note: "選擇編解碼引擎，WASM 較慢但提供更好的壓縮品質。",
-		jsquash_wasm: "JSquash WASM",
-		browser_canvas: "瀏覽器 Canvas",
 		output_format: "輸出格式",
 		output_format_note: "壓縮圖片的輸出檔案編碼。",
 		default_params: "預設參數",
@@ -98,7 +90,6 @@ const translations = {
 		discard_all: "全部捨棄",
 		use_optimized: "使用壓縮版本",
 		manual_comp: "手動壓縮",
-		oxipng_opt: "OxiPNG 壓縮",
 		start_manual: "開始壓縮",
 		discard_manual: "捨棄手動壓縮",
 		pass_info: "第 {{pass}} 輪 ({{quality}}%)",
@@ -113,6 +104,8 @@ const translations = {
 		jpeg: "JPEG",
 		webp: "WebP",
 		png: "PNG",
+		gif: "GIF",
+		avif: "AVIF",
 	},
 };
 
@@ -124,7 +117,6 @@ const localeMap = {
 
 let currentLocale = "en-US";
 
-// Initialize locale synchronously if possible, or update later
 const updateLocale = (locale) => {
 	if (translations[locale]) {
 		currentLocale = locale;
@@ -137,7 +129,6 @@ const updateLocale = (locale) => {
 	}
 };
 
-// Try to get current locale from Discord
 const LocaleStore = flux.stores.LocaleStore;
 if (LocaleStore?.locale) {
 	updateLocale(LocaleStore.locale);

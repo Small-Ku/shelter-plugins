@@ -1,4 +1,4 @@
-import { fileToImageData, processImage } from "./codec";
+import { processImage } from "./codec";
 import { Strategy } from "./constants";
 
 const {
@@ -111,32 +111,23 @@ export async function compressImage(
 		targetMB,
 		strategy,
 		format,
-		engine,
-		useOxipng = true,
 		accuracy = 0.95,
 		onPass = () => {},
 	},
 ) {
 	const targetSize = targetMB * 1024 * 1024;
-	let lastProcessedFile = file;
-	let pass = 1;
-
-	// Decode once
-	const imageData = await fileToImageData(file);
 
 	log(
-		`Starting compression strategy: ${strategy} for ${file.name} (${file.size} bytes, ${imageData.width}x${imageData.height})`,
+		`Starting compression strategy: ${strategy} for ${file.name} (${file.size} bytes)`,
 	);
 
 	if (strategy === Strategy.NONE) return file;
 
 	if (strategy === Strategy.ONCE) {
-		const result = await processImage(imageData, {
+		const result = await processImage(file, {
 			quality,
 			maxDimension,
 			format,
-			engine,
-			useOxipng,
 			fileName: file.name,
 		});
 		onPass(1, quality, result, [{ q: quality, size: result.size }]);
@@ -144,6 +135,8 @@ export async function compressImage(
 	}
 
 	// AUTO STRATEGY
+	let lastProcessedFile = file;
+	let pass = 1;
 	let lastUpdateTime = 0;
 	const UPDATE_INTERVAL = 300; // ms
 
@@ -200,18 +193,10 @@ export async function compressImage(
 			`Pass ${pass}: Q=${effectiveQ.toFixed(2)} ([${lowQ.toFixed(3)}, ${highQ.toFixed(3)}])`,
 		);
 
-		const clonedData = new ImageData(
-			new Uint8ClampedArray(imageData.data),
-			imageData.width,
-			imageData.height,
-		);
-
-		const resultFile = await processImage(clonedData, {
+		const resultFile = await processImage(file, {
 			quality: effectiveQ,
 			maxDimension,
 			format,
-			engine,
-			useOxipng,
 			fileName: file.name,
 		});
 
